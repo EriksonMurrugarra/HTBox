@@ -25,9 +25,9 @@ class MainWindow(ctk.CTk):
         self.geometry("900x700")
         self.minsize(800, 600)
         
-        # Configurar tema de CustomTkinter
-        ctk.set_appearance_mode("dark")  # "dark" o "light"
-        ctk.set_default_color_theme("blue")  # "blue", "green", "dark-blue"
+        # Configurar tema de CustomTkinter - Tema claro estilo Spotify
+        ctk.set_appearance_mode("light")
+        ctk.set_default_color_theme("blue")
         
         # Controlador
         self.controller = AppController()
@@ -48,15 +48,16 @@ class MainWindow(ctk.CTk):
     def _create_widgets(self):
         """Crea todos los widgets de la interfaz"""
         
-        # Frame principal con padding
-        main_frame = ctk.CTkFrame(self)
+        # Frame principal con padding y fondo gris claro estilo Spotify
+        main_frame = ctk.CTkFrame(self, fg_color="#f8f8f8")
         main_frame.pack(fill="both", expand=True, padx=20, pady=20)
         
         # Título
         title_label = ctk.CTkLabel(
             main_frame,
             text="🎵 Spotify Automation",
-            font=ctk.CTkFont(size=28, weight="bold")
+            font=ctk.CTkFont(size=28, weight="bold"),
+            text_color="#191414"
         )
         title_label.pack(pady=(20, 10))
         
@@ -65,45 +66,58 @@ class MainWindow(ctk.CTk):
             main_frame,
             text="Gestiona la automatización de Spotify en múltiples dispositivos Android",
             font=ctk.CTkFont(size=14),
-            text_color="gray"
+            text_color="#535353"
         )
         subtitle_label.pack(pady=(0, 20))
         
-        # Frame de controles superiores
-        controls_frame = ctk.CTkFrame(main_frame)
+        # Frame de controles superiores con fondo blanco
+        controls_frame = ctk.CTkFrame(main_frame, fg_color="white")
         controls_frame.pack(fill="x", padx=20, pady=(0, 10))
         
-        # Botón de refrescar dispositivos
+        # Botón de refrescar dispositivos (gris tecnológico)
         refresh_button = ctk.CTkButton(
             controls_frame,
             text="🔄 Refrescar Dispositivos",
             command=self._refresh_devices,
-            width=200
+            width=200,
+            fg_color="#535353",
+            hover_color="#404040",
+            text_color="white"
         )
         refresh_button.pack(side="left", padx=10, pady=10)
         
-        # Botón de iniciar todos
+        # Botón de iniciar todos (verde Spotify)
         start_all_button = ctk.CTkButton(
             controls_frame,
             text="▶ Iniciar Todos",
             command=self._start_all_flows,
             width=200,
-            fg_color="green",
-            hover_color="darkgreen"
+            fg_color="#1DB954",
+            hover_color="#1ed760",
+            text_color="white",
+            font=ctk.CTkFont(size=14, weight="bold")
         )
         start_all_button.pack(side="left", padx=10, pady=10)
         
         # Campo de artista
-        artist_frame = ctk.CTkFrame(controls_frame)
+        artist_frame = ctk.CTkFrame(controls_frame, fg_color="transparent")
         artist_frame.pack(side="left", padx=10, pady=10)
         
-        artist_label = ctk.CTkLabel(artist_frame, text="Artista:")
+        artist_label = ctk.CTkLabel(
+            artist_frame,
+            text="Artista:",
+            text_color="#191414",
+            font=ctk.CTkFont(size=14)
+        )
         artist_label.pack(side="left", padx=(0, 5))
         
         self.artist_entry = ctk.CTkEntry(
             artist_frame,
             placeholder_text="Martin Garrix",
-            width=150
+            width=150,
+            fg_color="white",
+            border_color="#b3b3b3",
+            text_color="#191414"
         )
         self.artist_entry.pack(side="left")
         self.artist_entry.insert(0, "Martin Garrix")
@@ -112,7 +126,8 @@ class MainWindow(ctk.CTk):
         devices_label = ctk.CTkLabel(
             main_frame,
             text="Dispositivos Conectados",
-            font=ctk.CTkFont(size=18, weight="bold")
+            font=ctk.CTkFont(size=18, weight="bold"),
+            text_color="#191414"
         )
         devices_label.pack(anchor="w", padx=20, pady=(10, 5))
         
@@ -124,15 +139,15 @@ class MainWindow(ctk.CTk):
             on_stop=self._on_device_stop
         )
         
-        # Frame de estado inferior
-        status_frame = ctk.CTkFrame(main_frame)
+        # Frame de estado inferior con fondo blanco
+        status_frame = ctk.CTkFrame(main_frame, fg_color="white")
         status_frame.pack(fill="x", padx=20, pady=(0, 20))
         
         self.status_label = ctk.CTkLabel(
             status_frame,
             text="Listo",
             font=ctk.CTkFont(size=12),
-            text_color="gray"
+            text_color="#535353"
         )
         self.status_label.pack(pady=10)
     
@@ -149,7 +164,7 @@ class MainWindow(ctk.CTk):
             device_count = len(devices)
             self.status_label.configure(
                 text=f"Dispositivos encontrados: {device_count}",
-                text_color="white"
+                text_color="#191414"
             )
             
             logger.info(f"[MainWindow] Dispositivos refrescados: {device_count}")
@@ -192,12 +207,12 @@ class MainWindow(ctk.CTk):
         if self.controller.start_flow_for_device(device_id, artist_name):
             self.status_label.configure(
                 text=f"Flujo iniciado para dispositivo: {device_id}",
-                text_color="green"
+                text_color="#1DB954"
             )
         else:
             self.status_label.configure(
                 text=f"Error: El dispositivo {device_id} ya está en ejecución",
-                text_color="orange"
+                text_color="#e22134"
             )
     
     def _on_device_stop(self, device_id: str):
@@ -210,7 +225,7 @@ class MainWindow(ctk.CTk):
         self.controller.stop_flow_for_device(device_id)
         self.status_label.configure(
             text=f"Deteniendo flujo para dispositivo: {device_id}",
-            text_color="orange"
+            text_color="#ff6b35"
         )
     
     def _start_all_flows(self):
@@ -220,7 +235,7 @@ class MainWindow(ctk.CTk):
         
         self.status_label.configure(
             text=f"Flujos iniciados para {count} dispositivo(s)",
-            text_color="green"
+            text_color="#1DB954"
         )
     
     def on_closing(self):

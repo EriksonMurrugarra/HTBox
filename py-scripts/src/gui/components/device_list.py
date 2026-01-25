@@ -13,6 +13,7 @@ class DeviceListFrame(ctk.CTkScrollableFrame):
     
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
+        self.configure(fg_color="#f8f8f8")
         self.device_widgets: dict[str, dict] = {}  # device_id -> {widgets}
         self.on_start_callback: Optional[Callable[[str], None]] = None
         self.on_stop_callback: Optional[Callable[[str], None]] = None
@@ -81,19 +82,24 @@ class DeviceListFrame(ctk.CTkScrollableFrame):
         """
         device_id = device.device_id
         
-        # Frame principal para el dispositivo
-        device_frame = ctk.CTkFrame(self)
+        # Frame principal para el dispositivo (card blanca estilo Spotify)
+        device_frame = ctk.CTkFrame(
+            self,
+            fg_color="white",
+            corner_radius=8
+        )
         device_frame.pack(fill="x", padx=5, pady=5)
         
         # Información del dispositivo
-        info_frame = ctk.CTkFrame(device_frame)
+        info_frame = ctk.CTkFrame(device_frame, fg_color="transparent")
         info_frame.pack(side="left", fill="both", expand=True, padx=5, pady=5)
         
         # ID del dispositivo
         device_label = ctk.CTkLabel(
             info_frame,
             text=f"📱 {device_id}",
-            font=ctk.CTkFont(size=14, weight="bold")
+            font=ctk.CTkFont(size=14, weight="bold"),
+            text_color="#191414"
         )
         device_label.pack(anchor="w", padx=10, pady=(10, 5))
         
@@ -103,7 +109,7 @@ class DeviceListFrame(ctk.CTkScrollableFrame):
             info_frame,
             text=device_type,
             font=ctk.CTkFont(size=11),
-            text_color="gray"
+            text_color="#535353"
         )
         type_label.pack(anchor="w", padx=10, pady=(0, 5))
         
@@ -111,18 +117,23 @@ class DeviceListFrame(ctk.CTkScrollableFrame):
         status_label = ctk.CTkLabel(
             info_frame,
             text=f"Estado: {status}",
-            font=ctk.CTkFont(size=11)
+            font=ctk.CTkFont(size=11),
+            text_color="#191414"
         )
         status_label.pack(anchor="w", padx=10, pady=(0, 10))
         
-        # Botones de acción
-        buttons_frame = ctk.CTkFrame(device_frame)
+        # Botones de acción (colores tecnológicos)
+        buttons_frame = ctk.CTkFrame(device_frame, fg_color="transparent")
         buttons_frame.pack(side="right", padx=5, pady=5)
         
         start_button = ctk.CTkButton(
             buttons_frame,
             text="▶ Iniciar",
             width=100,
+            fg_color="#1DB954",
+            hover_color="#1ed760",
+            text_color="white",
+            font=ctk.CTkFont(size=12, weight="bold"),
             command=lambda: self._on_start_clicked(device_id) if self.on_start_callback else None
         )
         start_button.pack(side="left", padx=5)
@@ -131,8 +142,10 @@ class DeviceListFrame(ctk.CTkScrollableFrame):
             buttons_frame,
             text="⏹ Detener",
             width=100,
-            fg_color="red",
-            hover_color="darkred",
+            fg_color="#535353",
+            hover_color="#404040",
+            text_color="white",
+            font=ctk.CTkFont(size=12),
             command=lambda: self._on_stop_clicked(device_id) if self.on_stop_callback else None
         )
         stop_button.pack(side="left", padx=5)
@@ -171,15 +184,15 @@ class DeviceListFrame(ctk.CTkScrollableFrame):
         widgets = self.device_widgets[device_id]
         widgets["status_label"].configure(text=f"Estado: {status}")
         
-        # Cambiar color del estado según el estado actual
+        # Cambiar color del estado según el estado actual (colores tecnológicos)
         if "Error" in status:
-            widgets["status_label"].configure(text_color="red")
+            widgets["status_label"].configure(text_color="#e22134")
         elif "Completado" in status or "✅" in status:
-            widgets["status_label"].configure(text_color="green")
+            widgets["status_label"].configure(text_color="#1DB954")
         elif "Ejecutando" in status or "Conectando" in status:
-            widgets["status_label"].configure(text_color="orange")
+            widgets["status_label"].configure(text_color="#ff6b35")
         else:
-            widgets["status_label"].configure(text_color="white")
+            widgets["status_label"].configure(text_color="#191414")
     
     def _remove_device_widget(self, device_id: str):
         """
