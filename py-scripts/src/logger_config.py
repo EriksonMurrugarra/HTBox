@@ -90,6 +90,12 @@ def setup_logger(
     if logger.handlers:
         return logger
     
+    # IMPORTANTE: Prevenir propagación al logger raíz para evitar duplicación
+    logger.propagate = False
+    
+    # Limpiar cualquier handler existente (por si acaso)
+    logger.handlers.clear()
+    
     logger.setLevel(log_level)
     
     # Formato detallado con timestamp, nivel, módulo, línea y mensaje (incluye device_id)

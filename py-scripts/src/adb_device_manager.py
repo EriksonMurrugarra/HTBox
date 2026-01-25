@@ -53,7 +53,7 @@ class AdbDeviceManager:
             if with_logs:
                 logger.info(f"Dispositivos encontrados: {len(available_devices)}")
                 for device in available_devices:
-                    logger.info(f"  - {device.device_id} (emulator: {device.is_emulator})")
+                    logger.debug(f"  - {device.device_id} (emulator: {device.is_emulator})")
             return available_devices
         except subprocess.CalledProcessError as e:
             logger.error(f"Error ejecutando 'adb devices': {e}", exc_info=True)

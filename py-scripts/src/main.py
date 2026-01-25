@@ -13,7 +13,7 @@ device_manager = AdbDeviceManager()
 
 # ------------------------------------------------------------
 
-available_devices = device_manager.get_available_devices(with_logs=True)
+available_devices = device_manager.get_available_devices(with_logs=False)
 
 
 def get_ui_automator_options(device_id: str, device_name: str):
