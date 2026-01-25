@@ -1,0 +1,24 @@
+# Dockerfile para compilar con PyInstaller para Linux
+FROM python:3.9-slim
+
+# Instalar dependencias del sistema necesarias para PyInstaller
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    binutils \
+    && rm -rf /var/lib/apt/lists/*
+
+# Establecer directorio de trabajo
+WORKDIR /app
+
+# Copiar requirements.txt e instalar dependencias
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copiar código fuente
+COPY . .
+
+# Crear directorio de salida
+RUN mkdir -p /app/dist-linux
+
+# Comando por defecto: compilar con PyInstaller
+CMD ["pyinstaller", "--onefile", "--name", "HTB_Spotify_001", "--paths", "src", "src/main.py"]
