@@ -1,12 +1,21 @@
 # -*- mode: python ; coding: utf-8 -*-
+from PyInstaller.utils.hooks import collect_all
+
+datas = []
+binaries = []
+hiddenimports = ['appium', 'appium.webdriver', 'appium.webdriver.common', 'appium.webdriver.common.appiumby', 'appium.options', 'appium.options.android', 'selenium', 'selenium.webdriver', 'selenium.webdriver.support', 'selenium.webdriver.support.ui', 'selenium.webdriver.support.expected_conditions', 'selenium.common.exceptions', 'logger_config', 'adb_device_manager', 'app_page', 'spotify_page', 'exceptions', 'flows', 'flows.spotify_flow_1']
+tmp_ret = collect_all('appium')
+datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
+tmp_ret = collect_all('selenium')
+datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
 
 
 a = Analysis(
-    ['src/main.py'],
+    ['src\\main.py'],
     pathex=['src'],
-    binaries=[],
-    datas=[],
-    hiddenimports=[],
+    binaries=binaries,
+    datas=datas,
+    hiddenimports=hiddenimports,
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
